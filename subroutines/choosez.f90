@@ -1,0 +1,55 @@
+SUBROUTINE CHOOSEZ (Z1, Z2, Z3, Z2I, Z3I, ACUB, BCUB, Z)
+  REAL, INTENT(IN) :: Z1, Z2, Z3, Z2I, Z3I, ACUB, BCUB
+  REAL, INTENT(OUT) :: Z
+  REAL :: ZMIN, ZMAX, FUGMIN, FUGMAX, FUGRATIO
+
+  IF (Z2I .NE. 0 .AND. Z3I .NE. 0) THEN
+    Z = Z1
+  ELSE IF (Z2I .NE. 0 )  THEN
+    ZMIN = MIN(Z1, Z3)
+    ZMAX = MAX(Z1, Z3)
+    IF (ZMIN < 0) THEN
+      Z = ZMAX
+    ELSE
+      FUGMIN = ((ZMIN - 1)/(ZMIN-BCUB))*((ZMIN+(SQRT(2.0)+1)*BCUB)/(ZMIN-(SQRT(2.0)+1)*BCUB))**(ACUB/(2*SQRT(2.0)*BCUB))
+      FUGMAX = ((ZMAX - 1)/(ZMAX-BCUB))*((ZMAX+(SQRT(2.0)+1)*BCUB)/(ZMAX-(SQRT(2.0)+1)*BCUB))**(ACUB/(2*SQRT(2.0)*BCUB))
+      FUGRATIO = FUGMAX/FUGMIN
+         IF(FUGRATIO>1) THEN
+           Z = ZMIN
+         ELSE
+           Z = ZMAX
+         ENDIF
+    ENDIF
+  ELSE IF (Z3I .NE. 0)  THEN
+    ZMIN = MIN(Z1, Z2)
+    ZMAX = MAX(Z1, Z2)
+      IF (ZMIN < 0) THEN
+        Z = ZMAX
+      ELSE
+        FUGMIN = ((ZMIN - 1)/(ZMIN-BCUB))*((ZMIN+(SQRT(2.0)+1)*BCUB)/(ZMIN-(SQRT(2.0)+1)*BCUB))**(ACUB/(2*SQRT(2.0)*BCUB))
+        FUGMAX = ((ZMAX - 1)/(ZMAX-BCUB))*((ZMAX+(SQRT(2.0)+1)*BCUB)/(ZMAX-(SQRT(2.0)+1)*BCUB))**(ACUB/(2*SQRT(2.0)*BCUB))
+        FUGRATIO = FUGMAX/FUGMIN
+        IF(FUGRATIO>1) THEN
+          Z = ZMIN
+        ELSE
+          Z = ZMAX
+        ENDIF
+      ENDIF
+  ELSE
+    ZMIN = MIN(Z1, Z2, Z3)
+    ZMAX = MAX(Z1, Z2, Z3)
+      IF (ZMIN < 0) THEN
+        Z = ZMAX
+      ELSE
+        FUGMIN = ((ZMIN - 1)/(ZMIN-BCUB))*((ZMIN+(SQRT(2.0)+1)*BCUB)/(ZMIN-(SQRT(2.0)+1)*BCUB))**(ACUB/(2*SQRT(2.0)*BCUB))
+        FUGMAX = ((ZMAX - 1)/(ZMAX-BCUB))*((ZMAX+(SQRT(2.0)+1)*BCUB)/(ZMAX-(SQRT(2.0)+1)*BCUB))**(ACUB/(2*SQRT(2.0)*BCUB))
+        FUGRATIO = FUGMAX/FUGMIN
+        IF(FUGRATIO>1) THEN
+          Z = ZMIN
+        ELSE
+          Z = ZMAX
+        ENDIF
+      ENDIF
+  ENDIF
+  RETURN
+END SUBROUTINE CHOOSEZ
